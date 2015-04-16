@@ -1986,7 +1986,7 @@ var $$AnimateQueueProvider = ['$animateProvider', function($animateProvider) {
 
       // we create a fake runner with a working promise.
       // These methods will become available after the digest has passed
-      var runner = new $$AnimateRunner();
+      var runner = new $$AnimateRunner(null, true);
 
       // there are situations where a directive issues an animation for
       // a jqLite wrapper that contains only comment nodes... If this
@@ -2384,11 +2384,11 @@ var $$AnimateRunnerFactory = ['$q', '$$rAFMutex', function($q, $$rAFMutex) {
     }
   };
 
-  function AnimateRunner(host) {
+  function AnimateRunner(host, fake) {
     this.setHost(host);
 
     this._doneCallbacks = [];
-    this._runInAnimationFrame = $$rAFMutex();
+    this._runInAnimationFrame = fake ? function(f) { f(); } : $$rAFMutex();
     this._state = 0;
   }
 
